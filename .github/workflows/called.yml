@@ -1,0 +1,15 @@
+name: GitHub Actions Demo Called
+run-name: ${{ github.actor }} is testing out GitHub Actions Called 🚀
+on: 
+  workflow_call:
+    inputs:
+      config-path:
+        required: true
+        type: string
+jobs:
+  Explore-GitHub-Actions-Called:
+    runs-on: ubuntu-latest
+    environment: firstEnvironment
+    steps:
+      - run: echo "🎉 $config-path"
+      - run: echo "🎉 $config-patht"
