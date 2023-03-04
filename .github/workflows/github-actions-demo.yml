@@ -43,4 +43,4 @@ jobs:
     needs: Explore-GitHub-Actions
     environment: firstEnvironment
     steps:
-      - run: echo "::warning file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
+      - run: echo "::error file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
