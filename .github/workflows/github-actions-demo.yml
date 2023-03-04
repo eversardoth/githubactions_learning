@@ -44,3 +44,11 @@ jobs:
     environment: firstEnvironment
     steps:
       - run: echo "::error file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
+  bash-example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Group of log lines
+        run: |
+            echo "::group::My title"
+            echo "Inside group"
+            echo "::endgroup::"
