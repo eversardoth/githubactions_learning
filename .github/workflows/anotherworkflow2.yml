@@ -6,6 +6,7 @@ on:
       word:
         required: false
         type: string
+  push:
 jobs:
   Explore-GitHub-Actions-Called:
     runs-on: ubuntu-latest
