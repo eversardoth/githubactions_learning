@@ -7,60 +7,8 @@ env:
   close.sardoth: hola3
 jobs:
   Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     environment: firstEnvironment
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ env.config-path }}."
-  dump_contexts_to_log:
-    runs-on: ubuntu-latest
-    needs: Explore-GitHub-Actions
-    environment: firstEnvironment
-    steps:
-      - name: Dump GitHub context
-        id: github_context_step
-        run: echo '${{ toJSON(github) }}'
-      - name: Dump job context
-        run: echo '${{ toJSON(job) }}'
-      - name: Dump steps context
-        run: echo '${{ toJSON(steps) }}'
-      - name: Dump runner context
-        run: echo '${{ toJSON(runner) }}'
-      - name: Dump strategy context
-        run: echo '${{ toJSON(strategy) }}'
-      - name: Dump matrix context
-        run: echo '${{ toJSON(env) }}'
-  howitlooks:
-    runs-on: ubuntu-latest
-    needs: Explore-GitHub-Actions
-    environment: firstEnvironment
-    steps:
-      - run: echo "::error file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
-  bash-example:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Group of log lines
-        run: |
-            echo "::group::My title"
-            echo "Inside group"
-            echo "::endgroup::"
-  workflow-command-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Disable workflow commands
-        run: |
-          echo '::warning:: This is a warning message, to demonstrate that commands are being processed.'
-          stopMarker=$(uuidgen)
-          echo "::stop-commands::$stopMarker"
-          echo '::warning:: This will NOT be rendered as a warning, because stop-commands has been invoked.'
-          echo "::$stopMarker::"
-          echo '::warning:: This is a warning again, because stop-commands has been turned off.'
+      - run: echo "ever"
+        shell: bash
