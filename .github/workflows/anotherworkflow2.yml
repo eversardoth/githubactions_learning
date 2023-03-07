@@ -1,7 +1,11 @@
-name: GitHub Actions Demo Called
+name: GitHub Actions Demo Called Ever test
 run-name: ${{ github.actor }} is testing out GitHub Actions Called 🚀
 on: 
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      word:
+        required: false
+        type: string
 jobs:
   Explore-GitHub-Actions-Called:
     runs-on: ubuntu-latest
