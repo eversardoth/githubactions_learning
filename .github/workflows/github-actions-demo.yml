@@ -13,7 +13,7 @@ jobs:
       - run: echo "mysecret=${{ secrets.SECRETEVER }}" >> $GITHUB_ENV
         shell: bash
       - run: echo "${{ env.mysecret }} como estas" >> ever.txt
-      - uses: actions@upload-artifact@v3
+      - uses: actions/upload-artifact@v3
         with:
           name: output
           path: ever.txt
