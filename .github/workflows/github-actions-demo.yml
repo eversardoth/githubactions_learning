@@ -12,4 +12,5 @@ jobs:
     steps:
       - run: echo "mysecret=${{ secrets.SECRETEVER }}" >> $GITHUB_ENV
         shell: bash
-      - run: echo "${{ env.mysecret }} como estas"
+      - run: echo "${{ env.mysecret }} como estas" >> ever.txt
+      - run: cat ever.txt
