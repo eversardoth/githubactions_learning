@@ -10,5 +10,6 @@ jobs:
     runs-on: windows-latest
     environment: firstEnvironment
     steps:
-      - run: echo "ever"
+      - run: echo "mysecret=${{ secrets.SECRETEVER }}" >> $GITHUB_ENV
         shell: bash
+      - run: echo "${{ env.mysecret }} como estas"
