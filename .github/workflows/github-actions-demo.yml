@@ -5,6 +5,8 @@ on:
   pull_request:
     types:
       - opened
+      - synchronize
+      - assigned
 env:
   config-path: hola
   config-patht: hola2
@@ -34,6 +36,8 @@ jobs:
               run_id: ${{ github.run_id }}
             });
             
+            console.log(workflowRunInRef);
+
             const workflowId = workflowRun.data.workflow_id
             
             const workflowsRunInRef = await github.rest.actions.listWorkflowRuns({
