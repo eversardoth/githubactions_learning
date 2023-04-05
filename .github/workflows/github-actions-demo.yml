@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
     types:
-      - created
+      - opened
 env:
   config-path: hola
   config-patht: hola2
