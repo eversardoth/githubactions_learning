@@ -37,6 +37,8 @@ jobs:
             });
             
             console.log(workflowRun);
+            
+            console.log(JSON.stringify(workflowRun.data.pull_requests));
 
             const workflowId = workflowRun.data.workflow_id
             
@@ -44,7 +46,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: workflowId,
-              branch: '${{ github.ref_name }}'
+              branch: '${{ github.head_ref }}'
             });
             
             console.log(workflowsRunInRef);
