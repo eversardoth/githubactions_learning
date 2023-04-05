@@ -36,7 +36,7 @@ jobs:
             
             const workflowId = workflowRun.data.workflow_id
             
-            const worflowsRunInRef = await github.rest.actions.listWorkflowRuns({
+            const workflowsRunInRef = await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: workflowId,
