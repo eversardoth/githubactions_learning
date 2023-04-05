@@ -5,7 +5,7 @@ on:
 env:
   config-path: hola
   config-patht: hola2
-  close.sardoth: hola3
+  close-sardoth: hola3
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -15,6 +15,24 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: '0'
+      - name: Env test
+        env:
+          suffix: ${{ env.config-path && env.config-patht || env.close-sardoth }}
+        run: |
+          echo "$suffix"
+      - name: Get number of workflows
+        uses: actions/github-script@v6
+        with:
+          retries: 3
+          script: |
+            const workflowId = await github.rest.actions.getWorkflowRun({
+              owner: context.repo.repo,
+              repo: context.repo.repo,
+              run_id: ${{ github.run_id }}
+            });
+            
+            console.log(worflowId);
+        
       - uses: paulhatch/semantic-version@master
         id: semantic
         with:
