@@ -39,7 +39,7 @@ jobs:
             const worflowsRunInRef = await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              branch: ${{ github.ref }}
+              branch: '${{ github.ref }}'
             });
             
             console.log(workflowsRunInRef);
