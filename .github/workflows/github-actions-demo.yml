@@ -26,7 +26,7 @@ jobs:
           retries: 3
           script: |
             const workflowId = await github.rest.actions.getWorkflowRun({
-              owner: context.repo.repo,
+              owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.run_id }}
             });
