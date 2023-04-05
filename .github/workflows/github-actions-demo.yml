@@ -47,9 +47,10 @@ jobs:
               repo: context.repo.repo,
               workflow_id: workflowId,
               branch: '${{ github.head_ref }}'
+              event: '${{ github.event_name}}'
             });
             
-            console.log(workflowsRunInRef);
+            console.log(JSON.stringify(workflowsRunInRef));
         
       - uses: paulhatch/semantic-version@master
         id: semantic
