@@ -1,10 +1,12 @@
-name: GitHub Actions Demo
+name: GitHub Actions Demooo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   workflow_dispatch:
   pull_request:
     types:
       - opened
+      - synchronize
+      - assigned
 env:
   config-path: hola
   config-patht: hola2
@@ -34,13 +36,17 @@ jobs:
               run_id: ${{ github.run_id }}
             });
             
+            console.log(workflowRun);
+            
+            console.log(JSON.stringify(workflowRun.data.pull_requests));
+
             const workflowId = workflowRun.data.workflow_id
             
             const workflowsRunInRef = await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: workflowId,
-              branch: '${{ github.ref_name }}'
+              branch: '${{ github.head_ref }}'
             });
             
             console.log(workflowsRunInRef);
@@ -61,7 +67,3 @@ jobs:
           echo "${{ steps.semantic.outputs.current_commit }}"
           echo "${{ steps.semantic.outputs.previous_commit }}"
           echo "${{ steps.semantic.outputs.previous_version}}"
-
-
-          
-   
