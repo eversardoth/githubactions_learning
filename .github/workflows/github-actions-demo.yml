@@ -31,7 +31,7 @@ jobs:
               run_id: ${{ github.run_id }}
             });
             
-            console.log(worflowId);
+            console.log(workflowId);
         
       - uses: paulhatch/semantic-version@master
         id: semantic
