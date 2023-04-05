@@ -19,7 +19,6 @@ jobs:
         id: semantic
         with:
           version_format: ${major}.${minor}.${patch}-eversardoth
-          namespace: ever
       - run: |
           echo "${{ steps.semantic.outputs.major }}"
           echo "${{ steps.semantic.outputs.minor }}"
