@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   workflow_dispatch:
 env:
-  config-path: hola
+  config-path: holaa
   config-patht: hola2
   close-sardoth: hola3
 jobs:
