@@ -14,7 +14,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: '0'        
+          fetch-depth: '0'
+      - run: git show 7f77ca7a59ce6e0b27126f1127285d2267c7f2c1
       - uses: paulhatch/semantic-version@master
         id: semantic
         with:
