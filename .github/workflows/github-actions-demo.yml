@@ -1,21 +1,61 @@
-name: GitHub Actions Demo
+name: GitHub Actions Demooo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - assigned
 env:
   config-path: hola
   config-patht: hola2
-  close.sardoth: hola3
+  close-sardoth: hola3
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     environment: firstEnvironment
     steps:
-      - uses: paulhatch/semantic-version@v5.0.2
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Env test
+        env:
+          suffix: ${{ env.config-path && env.config-patht || env.close-sardoth }}
+        run: |
+          echo "$suffix"
+      - name: Get number of workflows
+        uses: actions/github-script@v6
+        with:
+          retries: 3
+          script: |
+            const workflowRun = await github.rest.actions.getWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: ${{ github.run_id }}
+            });
+            
+            console.log(workflowRun);
+            
+            console.log(JSON.stringify(workflowRun.data.pull_requests));
+
+            const workflowId = workflowRun.data.workflow_id
+            
+            const workflowsRunInRef = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: workflowId,
+              branch: '${{ github.head_ref }}',
+              event: '${{ github.event_name}}'
+            });
+            
+            console.log(JSON.stringify(workflowsRunInRef));
+        
+      - uses: paulhatch/semantic-version@master
         id: semantic
         with:
           version_format: ${major}.${minor}.${patch}-eversardoth
-          namespace: ever
       - run: |
           echo "${{ steps.semantic.outputs.major }}"
           echo "${{ steps.semantic.outputs.minor }}"
@@ -28,7 +68,3 @@ jobs:
           echo "${{ steps.semantic.outputs.current_commit }}"
           echo "${{ steps.semantic.outputs.previous_commit }}"
           echo "${{ steps.semantic.outputs.previous_version}}"
-
-
-          
-   
