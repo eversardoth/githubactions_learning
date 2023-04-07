@@ -1,0 +1,27 @@
+name: Create tags test
+run-name: ${{ github.actor }} is testing creation of release
+on:
+  workflow_dispatch:
+env:
+  config-path: holaaaaaaa
+  config-patht: hola2
+  close-sardoth: hola3
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    environment: firstEnvironment
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.15
+          target_commitish: "77c7ecfed0e3185bb1511057135c63aa31b44817"
+      - name: Release2
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.15
+          target_commitish: "f3ab78ec9b86513b0e005f92b2e44dd5e9afba2a"
