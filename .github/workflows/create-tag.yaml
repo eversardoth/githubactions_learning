@@ -16,6 +16,6 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
           tag: "v.1.0.16"
