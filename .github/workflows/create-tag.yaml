@@ -23,4 +23,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: "v1.0.16",
+              tag_commitish: "91c58599111c3bf6bcab8459449a388010cb18bb"
             })
