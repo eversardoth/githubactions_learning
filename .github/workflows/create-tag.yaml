@@ -1,0 +1,34 @@
+name: Create tags test
+run-name: ${{ github.actor }} is testing creation of release
+on:
+  workflow_dispatch:
+env:
+  config-path: holaaaaaaa
+  config-patht: hola2
+  close-sardoth: hola3
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    environment: firstEnvironment
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Try
+        uses: actions/github-script@v6
+        with:
+          script: |
+            try{
+              await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: "v1.0.16",
+              tag_commitish: "91c58599111c3bf6bcab8459449a388010cb18bb"
+            })
+            } catch(error){
+            
+              console.log(JSON.stringify(error.response));
+            
+            }
+
