@@ -77,7 +77,7 @@ runs:
 
               // Calculate pre-release suffix based on retrieved list from API
 
-              let generated_tag = process.env.generated_tag;
+              const generated_tag = process.env.generated_tag;
 
               let last_prerelease = 0;
 
@@ -99,7 +99,6 @@ runs:
                               break;
                           }
                       }
-                      generated_tag = `${generated_tag}-${last_prerelease + 1}`;
 
                   } catch (error) {
                       core.error("Unexpected error fetching exisitng releases and generating prerelease suffix");
@@ -110,7 +109,7 @@ runs:
 
               }
 
-              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, process.env.target_commitish, release_type === 'prerelease' ? 'true' : 'false', 3)
+              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, last_prerelease, process.env.target_commitish, release_type === 'prerelease' ? true : false, 3)
 
               // Search glob matching files and try to upload them
 
