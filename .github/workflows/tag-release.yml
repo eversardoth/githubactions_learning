@@ -7,5 +7,5 @@ jobs:
         steps:
             - uses: ./.github/actions/ravere
               with:
-                type_release: pre-release
+                type_release: prerelease
 
