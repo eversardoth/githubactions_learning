@@ -10,5 +10,5 @@ jobs:
                 fetch-depth: 0
             - uses: ./.github/actions/ravere
               with:
-                type_release: prerelease
+                release_type: prerelease
 

@@ -1,7 +1,7 @@
 name: RA Tag and Release
 description: Tags and publishes pre and stable releases
 inputs:
-  type_release:
+  release_type:
     description: Type of release to publish, supported types are 'pre-release' and 'release'
     default: 'release'
     required: true
@@ -25,7 +25,8 @@ runs:
       env:
         generated_tag: ${{ steps.tag_generation.version_tag }}
         target_commitish: ${{ github.sha }}
-      if: inputs.type_release == 'release' || inputs.type_release == 'prerelease'
+        release_type: ${{ inputs.release_type }}
+      if: inputs.release_type == 'release' || inputs.release_type == 'prerelease'
       uses: actions/github-script@v6
       with:
         retries: 3
@@ -65,13 +66,13 @@ runs:
           try {
 
               // Check supported release types
-              const type_release = core.getInput('type_release');
-              core.info(type_release);
+              const release_type = process.env.release_type;
+              core.info(release_type);
 
-              if (type_release !== 'prerelease' && type_release !== 'release') {
+              if (release_type !== 'prerelease' && release_type !== 'release') {
                   throw new Error("This action only supports prerelease and release types")
               } else {
-                  core.info(`This action was set to publish a ${type_release}`)
+                  core.info(`This action was set to publish a ${release_type}`)
               }
 
               // Calculate pre-release suffix based on retrieved list from API
@@ -80,7 +81,7 @@ runs:
 
               let last_prerelease = 0;
 
-              if (type_release === 'prerelease') {
+              if (release_type === 'prerelease') {
 
                   try {
                       for await (const response of github.paginate.iterator(
@@ -107,7 +108,7 @@ runs:
 
               }
 
-              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, process.env.target_commitish, type_release === 'prerelease' ? true : false, 3)
+              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, process.env.target_commitish, release_type === 'prerelease' ? true : false, 3)
 
               // Search glob matching files and try to upload them
 
