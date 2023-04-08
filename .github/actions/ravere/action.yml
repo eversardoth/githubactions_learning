@@ -67,7 +67,7 @@ runs:
               // Check supported release types
               const release_type = core.getInput('release_type')
 
-              if (release_type !== 'prerelease' || release_type !== 'release') {
+              if (release_type !== 'prerelease' && release_type !== 'release') {
                   throw new Error("This action only supports prerelease and release types")
               } else {
                   core.info(`This action was set to publish a ${release_type}`)
