@@ -51,7 +51,7 @@ runs:
                   
                   return release;
               } catch (error) {
-                  const already_exists_error = error.response.data.errors.find((error) => error.resource === "Release" && error.code === "already_exists" && field === "tag_name");
+                  const already_exists_error = error.response?.data?.errors.find((error) => error.resource === "Release" && error.code === "already_exists" && field === "tag_name");
                   if(error.status === 422 && already_exists_error){
                       core.warning("The generated prerelease suffix is already used, this can be related to race conditions for prereleases generation,the suffix will be increased by one");
                       return createRelease(owner, repo, generated_tag, prerelease_suffix, target_commitish, prerelease, max_suffix_increase-1);
