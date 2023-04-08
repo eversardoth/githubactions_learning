@@ -1,0 +1,11 @@
+name: Demo workflow to
+on: workflow_dispatch
+run-name: Demo workflow
+jobs:
+    demo-job:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: ./.github/actions/ravere
+              with:
+                type_release: pre-release
+
