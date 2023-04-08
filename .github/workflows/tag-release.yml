@@ -5,7 +5,10 @@ jobs:
     demo-job:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
             - uses: ./.github/actions/ravere
               with:
-                type_release: prerelease
+                type_release: pre-release
 
