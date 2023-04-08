@@ -23,7 +23,7 @@ runs:
     - name: Tag and Publish release
       id: tag_release
       env:
-        generated_tag: ${{ steps.tag_generation.version_tag }}
+        generated_tag: ${{ steps.tag_generation.outputs.version_tag }}
         target_commitish: ${{ github.sha }}
         release_type: ${{ inputs.release_type }}
       if: inputs.release_type == 'release' || inputs.release_type == 'prerelease'
