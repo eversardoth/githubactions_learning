@@ -1,6 +1,10 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
+  pull_request:
+    types:
+     - opened
+     - synchronize
   workflow_dispatch:
 env:
   config-path: holaaaaaaa
@@ -16,8 +20,8 @@ jobs:
         with:
           fetch-depth: '0'
       - run: |
-          git fetch origin 7f77ca7a59ce6e0b27126f1127285d2267c7f2c1
-          git show 7f77ca7a59ce6e0b27126f1127285d2267c7f2c1 --format=fuller
+          echo "${{ github.event.action }}"
+          echo "${{ github.event_name }}"
       - uses: paulhatch/semantic-version@master
         id: semantic
         with:
