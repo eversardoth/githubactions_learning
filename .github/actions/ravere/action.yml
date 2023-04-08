@@ -65,13 +65,12 @@ runs:
           try {
 
               // Check supported release types
-              const release_type = core.getInput('release_type');
-              core.info(release_type);
+              const type_release = core.getInput('type_release');
 
-              if (release_type !== 'prerelease' && release_type !== 'release') {
+              if (type_release !== 'prerelease' && type_release !== 'release') {
                   throw new Error("This action only supports prerelease and release types")
               } else {
-                  core.info(`This action was set to publish a ${release_type}`)
+                  core.info(`This action was set to publish a ${type_release}`)
               }
 
               // Calculate pre-release suffix based on retrieved list from API
@@ -80,7 +79,7 @@ runs:
 
               let last_prerelease = 0;
 
-              if (release_type === 'prerelease') {
+              if (type_release === 'prerelease') {
 
                   try {
                       for await (const response of github.paginate.iterator(
@@ -107,7 +106,7 @@ runs:
 
               }
 
-              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, process.env.target_commitish, release_type === 'prerelease' ? true : false, 3)
+              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, process.env.target_commitish, type_release === 'prerelease' ? true : false, 3)
 
               // Search glob matching files and try to upload them
 
