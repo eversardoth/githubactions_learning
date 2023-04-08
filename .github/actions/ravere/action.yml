@@ -90,7 +90,7 @@ runs:
                               repo: context.repo.repo,
                           })
                       )) {
-                          const regex = RegExp(`^${current_tag}-[0-9]+$`);
+                          const regex = RegExp(`^${generated_tag}-[0-9]+$`);
                           const latest_tag = response.data.find((tag) => { return regex.test(tag) });
                           if (latest_tag) {
                               last_prerelease = Number(latest_tag.split('-')[-1]);
