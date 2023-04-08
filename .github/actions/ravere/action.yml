@@ -14,7 +14,7 @@ runs:
   steps:
     - name: Tag generation
       id: tag_generation
-      uses: paulhatch/semantic-version@v5
+      uses: paulhatch/semantic-version@v5.0.3
       with:
         tag_prefix: "v"
         major_pattern: (MAJOR)
