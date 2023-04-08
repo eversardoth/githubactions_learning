@@ -40,6 +40,8 @@ runs:
 
               const prerelease_suffix = last_prerelease + 1;
 
+              console.log(`${generated_tag}-${prerelease_suffix}`);
+
               try {
                   const release = await github.rest.repos.createRelease({
                       owner: owner,
