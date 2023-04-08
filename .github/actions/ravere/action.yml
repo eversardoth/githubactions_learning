@@ -25,7 +25,7 @@ runs:
       env:
         generated_tag: ${{ steps.tag_generation.version_tag }}
         target_commitish: ${{ github.sha }}
-      if: inputs.type_release == 'release' || inputs.type_release == 'pre-release'
+      if: inputs.type_release == 'release' || inputs.type_release == 'prerelease'
       uses: actions/github-script@v6
       with:
         retries: 3
