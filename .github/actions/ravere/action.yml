@@ -85,14 +85,14 @@ runs:
 
                   try {
                       for await (const response of github.paginate.iterator(
-                          github.rest.repos.listTags({
+                          github.rest.repos.listReleases({
                               owner: context.repo.owner,
                               repo: context.repo.repo,
                           })
                       )) {
                           const regex = RegExp(`^${generated_tag}-[0-9]+$`);
                           console.log(JSON.stringify(response))
-                          const latest_tag = response.data.find((tag) => { return regex.test(tag) });
+                          const latest_tag = response.data.find((tag) => { return regex.test(tag.tag_name) });
                           if (latest_tag) {
                               last_prerelease = Number(latest_tag.split('-')[-1]);
                               break;
