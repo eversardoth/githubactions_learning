@@ -38,7 +38,7 @@ runs:
                   throw new Error("Too many suffix increases.");
               }
 
-              let prerelease_suffix = last_prerelease + 1;
+              const prerelease_suffix = last_prerelease + 1;
 
               try {
                   const release = await github.rest.repos.createRelease({
@@ -77,7 +77,7 @@ runs:
 
               // Calculate pre-release suffix based on retrieved list from API
 
-              const generated_tag = process.env.generated_tag;
+              let generated_tag = process.env.generated_tag;
 
               let last_prerelease = 0;
 
