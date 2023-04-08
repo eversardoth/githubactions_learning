@@ -91,6 +91,7 @@ runs:
                           })
                       )) {
                           const regex = RegExp(`^${generated_tag}-[0-9]+$`);
+                          console.log(JSON.stringify(response))
                           const latest_tag = response.data.find((tag) => { return regex.test(tag) });
                           if (latest_tag) {
                               last_prerelease = Number(latest_tag.split('-')[-1]);
