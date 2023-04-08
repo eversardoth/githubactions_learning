@@ -110,7 +110,7 @@ runs:
 
               }
 
-              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, process.env.target_commitish, release_type === 'prerelease' ? true : false, 3)
+              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, process.env.target_commitish, release_type === 'prerelease' ? 'true' : 'false', 3)
 
               // Search glob matching files and try to upload them
 
