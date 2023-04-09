@@ -2,7 +2,7 @@ name: RA Tag and Release
 description: Tags and publishes pre and stable releases
 inputs:
   prerelease:
-    description: Indicator of whether or not is a prerelease
+    description: Indicator of whether or not it'll a prerelease publication
     required: false
   files:
     description: String with glob patterns of files that should be uploaded to the release
