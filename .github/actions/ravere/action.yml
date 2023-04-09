@@ -77,7 +77,7 @@ runs:
                   core.info(`This action was set to publish a ${process.env.prerelease === 'true' ? 'prerelease' : 'release'}`)
               }
 
-              const prerelease = process.env.prerelease.toUpper() === 'TRUE';
+              const prerelease = process.env.prerelease.toUpperCase() === 'TRUE';
               core.info(prerelease);
 
 
