@@ -1,10 +1,10 @@
 name: RA Tag and Release
 description: Tags and publishes pre and stable releases
 inputs:
-  release_type:
-    description: Type of release to publish, supported types are 'pre-release' and 'release'
+  prerelease:
+    description: Indicator of whether or not is a prerelease
     default: 'release'
-    required: true
+    required: false
   files:
     description: String with glob patterns of files that should be uploaded to the release
     required: false
@@ -23,15 +23,15 @@ runs:
     - name: Tag and Publish release
       id: tag_release
       env:
-        generated_tag: ${{ steps.tag_generation.outputs.version_tag }}
+        tag_name: ${{ steps.tag_generation.outputs.version_tag }}
         target_commitish: ${{ github.sha }}
-        release_type: ${{ inputs.release_type }}
-      if: inputs.release_type == 'release' || inputs.release_type == 'prerelease'
+        prerelease: ${{ inputs.prerelease }}
+        files: ${{ inputs.files }}
       uses: actions/github-script@v6
       with:
         retries: 3
         script: |
-          async function createRelease(owner, repo, generated_tag, last_prerelease, target_commitish, prerelease, max_suffix_increase=3){
+          async function createRelease(owner, repo, tag_name, last_prerelease, target_commitish, prerelease, max_suffix_increase=3){
 
               if (max_suffix_increase <= 0) {
                   core.error("Too many suffix increase retries. Aborting...");
@@ -40,13 +40,13 @@ runs:
 
               const prerelease_suffix = last_prerelease + 1;
 
-              console.log(`${generated_tag}-${prerelease_suffix}`);
+              console.log(`${tag_name}-${prerelease_suffix}`);
 
               try {
                   const release = await github.rest.repos.createRelease({
                       owner: owner,
                       repo: repo,
-                      tag_name: `${generated_tag}-${prerelease_suffix}`,
+                      tag_name: `${tag_name}-${prerelease_suffix}`,
                       target_commitish: target_commitish,
                       prerelease: prerelease,
                   });
@@ -56,7 +56,7 @@ runs:
                   const already_exists_error = error.response?.data?.errors?.find((error) => error.resource === "Release" && error.code === "already_exists" && error.field === "tag_name");
                   if(error.status === 422 && already_exists_error){
                       core.warning("The generated prerelease suffix is already used, this can be related to race conditions for prereleases generation,the suffix will be increased by one");
-                      return createRelease(owner, repo, generated_tag, prerelease_suffix, target_commitish, prerelease, max_suffix_increase-1);
+                      return createRelease(owner, repo, tag_name, prerelease_suffix, target_commitish, prerelease, max_suffix_increase-1);
                   }
                   core.error("There has been an issue tagging and publishing the release");
                   throw error;
@@ -67,23 +67,28 @@ runs:
 
           try {
 
-              // Check supported release types
-              const release_type = process.env.release_type;
-              core.info(release_type);
+          
 
-              if (release_type !== 'prerelease' && release_type !== 'release') {
-                  throw new Error("This action only supports prerelease and release types")
+              // Check supported release types
+
+              if (process.env.prerelease !== 'true' && process.env.prerelease !== 'false') {
+                  throw new Error("This input only accepts true and false")
               } else {
-                  core.info(`This action was set to publish a ${release_type}`)
+                  core.info(`This action was set to publish a ${process.env.prerelease === 'true' ? 'prerelease' : 'release'}`)
               }
+
+              const prerelease = process.env.prerelease.toUpper() === 'TRUE';
+              core.info(prerelease);
+
+
 
               // Calculate pre-release suffix based on retrieved list from API
 
-              const generated_tag = process.env.generated_tag;
+              const tag_name = process.env.tag_name;
 
               let last_prerelease = 0;
 
-              if (release_type === 'prerelease') {
+              if (prerelease) {
 
                   try {
                       for await (const response of github.paginate.iterator(
@@ -93,7 +98,7 @@ runs:
                               repo: context.repo.repo,
                           }
                       )) {
-                          const regex = RegExp(`^${generated_tag}-[0-9]+$`);
+                          const regex = RegExp(`^${tag_name}-[0-9]+$`);
                           console.log(JSON.stringify(response))
                           const latest_tag = response.data.find((tag) => { return regex.test(tag.name) });
                           if (latest_tag) {
@@ -114,11 +119,11 @@ runs:
 
               }
 
-              const release = await createRelease(context.repo.owner, context.repo.repo, generated_tag, last_prerelease, process.env.target_commitish, release_type === 'prerelease' ? true : false, 3)
+              const release = await createRelease(context.repo.owner, context.repo.repo, tag_name, last_prerelease, process.env.target_commitish, prerelease, 3)
 
               // Search glob matching files and try to upload them
 
-              const globber = await glob.create(core.getInput('files'));
+              const globber = await glob.create(process.env.files);
 
               const path = require('path');
 
@@ -161,3 +166,10 @@ runs:
           } catch (error) {
               core.setFailed(error);
           }
+    - name: Only publish
+      if: ${{ false }}
+      uses: softprops/action-gh-release@v0.1.15
+      with:
+        tag_name: ${steps.tag_release.outputs.tag_name}
+        files: ${{ inputs.files }}
+        prerelease: ${{inputs.prerelease }}
