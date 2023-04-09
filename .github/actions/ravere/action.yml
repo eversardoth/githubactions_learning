@@ -126,9 +126,9 @@ runs:
 
               const path = require('path');
 
-              await exec.exec('npm', ['install', 'mime']);
+              // await exec.exec('npm', ['install', 'mime']);
 
-              const mime = require('mime');
+              // const mime = require('mime');
 
               const fs = require('fs');
 
@@ -137,9 +137,9 @@ runs:
 
                       const name = path.basename(file);
               
-                      const file_type = mime.getType(file) || "application/octet-stream";
+                      // const file_type = mime.getType(file) || "application/octet-stream";
 
-                      // const file_type = "application/octet-stream";
+                      const file_type = "application/octet-stream";
 
                       const data = fs.readFileSync(file);
 
