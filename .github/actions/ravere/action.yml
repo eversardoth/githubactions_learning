@@ -119,6 +119,8 @@ runs:
 
               const path = require('path');
 
+              await exec.exec('npm', ['install', 'mime']);
+
               const mime = require('mime');
 
               const fs = require('fs');
