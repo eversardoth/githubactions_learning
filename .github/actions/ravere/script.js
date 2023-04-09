@@ -121,6 +121,8 @@ module.exports = async ({github, context, core, glob}) => {
         if (prerelease) {
             last_prerelease = await calculateLastPrerelease(tag_name);
         }
+        
+        console.log("El retry es", Number(core.getInput("retries")));
     
         //Create release and retrying 3 times with higher prerelease suffix if it already exists
         const release = await createRelease(context.repo.owner, context.repo.repo, tag_name, last_prerelease, process.env.target_commitish, prerelease, Number(core.getInput("retries")));
