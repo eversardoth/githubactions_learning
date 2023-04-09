@@ -1,8 +1,3 @@
-const core = require('@actions/core')
-const github = require('@actions/github')
-const glob = require('@action/glob')
-
-
 module.exports = async ({github, context, core, glob}) => {
 
     async function calculateLastPrerelease(tag_name) {
