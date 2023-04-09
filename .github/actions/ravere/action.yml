@@ -47,7 +47,7 @@ runs:
                       repo: repo,
                       tag_name: `${tag_name}-${prerelease_suffix}`,
                       target_commitish: target_commitish,
-                      prerelease: prerelease,
+                      prerelease: 3,
                   });
                   
                   return release;
@@ -58,6 +58,7 @@ runs:
                       return createRelease(owner, repo, tag_name, prerelease_suffix, target_commitish, prerelease, max_suffix_increase-1);
                   }
                   core.error("There has been an issue tagging and publishing the release");
+                  console.log(JSON.stringify(error))
                   throw error;
               }
 
