@@ -165,7 +165,7 @@ runs:
               // If its a PR comment that the pre release is trying to be builded, if everything well same comment modify, if bad que fue mal
 
           } catch (error) {
-              core.setFailed(error);
+              core.setFailed(JSON.stringify(error));
           }
     - name: Only publish
       if: ${{ false }}
