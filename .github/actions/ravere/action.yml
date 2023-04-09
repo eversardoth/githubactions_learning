@@ -99,6 +99,8 @@ runs:
                           if (latest_tag) {
                               last_prerelease = Number(latest_tag.name.split('-')[-1]);
                               console.log(last_prerelease);
+                              console.log(latest_tag.name)
+                              console.log(latest_tag.name.split('-')
                               break;
                           }
                       }
