@@ -47,7 +47,7 @@ runs:
                       repo: repo,
                       tag_name: `${tag_name}-${prerelease_suffix}`,
                       target_commitish: target_commitish,
-                      prerelease: 3,
+                      prerelease: prerelease,
                   });
                   
                   return release;
