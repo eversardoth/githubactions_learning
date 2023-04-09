@@ -115,7 +115,7 @@ runs:
 
               // Search glob matching files and try to upload them
 
-              const globber = glob.create(core.getInput('files'));
+              const globber = await glob.create(core.getInput('files'));
 
               const path = require('path');
 
