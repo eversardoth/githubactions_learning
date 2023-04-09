@@ -123,7 +123,7 @@ module.exports = async ({github, context, core, glob}) => {
         }
     
         //Create release and retrying 3 times with higher prerelease suffix if it already exists
-        const release = await createRelease(context.repo.owner, context.repo.repo, tag_name, last_prerelease, process.env.target_commitish, prerelease, 3);
+        const release = await createRelease(context.repo.owner, context.repo.repo, tag_name, last_prerelease, process.env.target_commitish, prerelease, Number(core.getInput("retries")));
     
         //Upload release assets
         await uploadAssets(release.data.id);
