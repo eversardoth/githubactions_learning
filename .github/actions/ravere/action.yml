@@ -97,7 +97,7 @@ runs:
                           console.log(JSON.stringify(response))
                           const latest_tag = response.data.find((tag) => { return regex.test(tag.name) });
                           if (latest_tag) {
-                              last_prerelease = Number(latest_tag.name.split('-')[-1]);
+                              last_prerelease = Number(latest_tag.name.split('-').pop());
                               console.log(last_prerelease);
                               console.log(latest_tag.name);
                               console.log(latest_tag.name.split('-'));
