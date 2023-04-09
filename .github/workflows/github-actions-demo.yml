@@ -29,7 +29,6 @@ jobs:
           echo "${{ steps.semantic.outputs.increment }}"
           echo "${{ steps.semantic.outputs.version }}"
           echo "${{ steps.semantic.outputs.version_tag }}"
-          echo "${{ steps.semantic.outputs.is_tagged }}"
           echo "${{ steps.semantic.outputs.authors }}"
           echo "${{ steps.semantic.outputs.current_commit }}"
           echo "${{ steps.semantic.outputs.previous_commit }}"
