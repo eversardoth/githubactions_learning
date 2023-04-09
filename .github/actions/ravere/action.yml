@@ -142,6 +142,8 @@ runs:
                       // const file_type = "application/octet-stream";
 
                       const data = fs.readFileSync(file);
+
+                      console.log(JSON.stringify(release))
               
                       await github.rest.repos.uploadReleaseAsset({
                           owner: context.repo.owner,
