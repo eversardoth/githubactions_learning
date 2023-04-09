@@ -30,7 +30,8 @@ runs:
       with:
         retries: 3
         script: |
-            const script = require('${{ github.action_path }}/script.js')
+            const script = require('${{ github.action_path }}/script.js');
+            await script({github, context, core, glob});
     - name: Only publish
       if: ${{ false }}
       uses: softprops/action-gh-release@v0.1.15
