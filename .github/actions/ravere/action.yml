@@ -30,146 +30,137 @@ runs:
       with:
         retries: 3
         script: |
-          async function createRelease(owner, repo, tag_name, last_prerelease, target_commitish, prerelease, max_suffix_increase=3){
+            async function calculateLastPrerelease(tag_name) {
 
-              if (max_suffix_increase <= 0) {
-                  core.error("Too many suffix increase retries. Aborting...");
-                  throw new Error("Too many suffix increases.");
-              }
+                try {
+                    for await (const response of github.paginate.iterator(
+                        github.rest.repos.listTags,
+                        {
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                        }
+                    )) {
+                        const regex = RegExp(`^${tag_name}-[0-9]+$`);
+                        const latest_tag = response.data.find((tag) => { return regex.test(tag.name) });
+                        if (latest_tag) {
+                            return Number(latest_tag.name.split('-').pop());
+                        }
+                    }
+                    return 0;
 
-              const prerelease_suffix = last_prerelease + 1;
+                } catch (error) {
+                    core.info("Unexpected error fetching exisitng releases and generating prerelease suffix");
+                    throw error;
+                }
 
-              console.log(`${tag_name}-${prerelease_suffix}`);
+            }
 
-              try {
-                  const release = await github.rest.repos.createRelease({
-                      owner: owner,
-                      repo: repo,
-                      tag_name: `${tag_name}-${prerelease_suffix}`,
-                      target_commitish: target_commitish,
-                      prerelease: prerelease,
-                  });
-                  
-                  return release;
-              } catch (error) {
-                  const already_exists_error = error.response?.data?.errors?.find((error) => error.resource === "Release" && error.code === "already_exists" && error.field === "tag_name");
-                  if(error.status === 422 && already_exists_error){
-                      core.warning("The generated prerelease suffix is already used, this can be related to race conditions for prereleases generation,the suffix will be increased by one");
-                      return createRelease(owner, repo, tag_name, prerelease_suffix, target_commitish, prerelease, max_suffix_increase-1);
-                  }
-                  core.error("There has been an issue tagging and publishing the release");
-                  console.log(JSON.stringify(error))
-                  throw error;
-              }
+            async function createRelease(owner, repo, tag_name, last_prerelease, target_commitish, prerelease, max_suffix_increase = 3) {
 
+                if (max_suffix_increase <= 0) {
+                    core.info("Too many suffix increase retries. Aborting...");
+                    throw new Error("Too many suffix increases.");
+                }
 
-          }
+                try {
 
-          try {
+                    const release = await github.rest.repos.createRelease({
+                        owner: owner,
+                        repo: repo,
+                        tag_name: prerelease ? `${tag_name}-${last_prerelease + 1}` : tag_name,
+                        target_commitish: target_commitish,
+                        prerelease: prerelease,
+                    });
 
-          
+                    return release;
 
-              // Check supported release types
+                } catch (error) {
 
-              if (process.env.prerelease !== 'true' && process.env.prerelease !== 'false') {
-                  throw new Error("This input only accepts true and false")
-              } else {
-                  core.info(`This action was set to publish a ${process.env.prerelease === 'true' ? 'prerelease' : 'release'}`)
-              }
+                    if (error.status === 422 && error.response.data.errors?.find((error) => error.resource === "Release" && error.code === "already_exists" && error.field === "tag_name")) {
+                        core.warning("The generated prerelease suffix already exists, retrying with a higher suffix");
+                        return createRelease(owner, repo, tag_name, last_prerelease + 1, target_commitish, prerelease, max_suffix_increase - 1);
+                    }
 
-              const prerelease = process.env.prerelease.toUpperCase() === 'TRUE';
-              core.info(prerelease);
-
-
-
-              // Calculate pre-release suffix based on retrieved list from API
-
-              const tag_name = process.env.tag_name;
-
-              let last_prerelease = 0;
-
-              if (prerelease) {
-
-                  try {
-                      for await (const response of github.paginate.iterator(
-                          github.rest.repos.listTags,
-                          {
-                              owner: context.repo.owner,
-                              repo: context.repo.repo,
-                          }
-                      )) {
-                          const regex = RegExp(`^${tag_name}-[0-9]+$`);
-                          console.log(JSON.stringify(response))
-                          const latest_tag = response.data.find((tag) => { return regex.test(tag.name) });
-                          if (latest_tag) {
-                              last_prerelease = Number(latest_tag.name.split('-').pop());
-                              console.log(last_prerelease);
-                              console.log(latest_tag.name);
-                              console.log(latest_tag.name.split('-'));
-                              break;
-                          }
-                      }
-
-                  } catch (error) {
-                      core.error("Unexpected error fetching exisitng releases and generating prerelease suffix");
-                      throw error;
-                  }
+                    core.info("There has been an issue tagging and publishing the release");
+                    throw error;
+                }
 
 
+            }
 
-              }
+            async function uploadAssets(release_id){
 
-              const release = await createRelease(context.repo.owner, context.repo.repo, tag_name, last_prerelease, process.env.target_commitish, prerelease, 3)
+                // Search glob matching files and try to upload them
 
-              // Search glob matching files and try to upload them
+                const globber = await glob.create(process.env.files);
 
-              const globber = await glob.create(process.env.files);
+                const path = require('path');
 
-              const path = require('path');
+                const fs = require('fs');
 
-              // await exec.exec('npm', ['install', 'mime']);
+                try {
+                    for await (const file of globber.globGenerator()) {
 
-              // const mime = require('mime');
+                        const name = path.basename(file);
 
-              const fs = require('fs');
+                        const file_type = "application/octet-stream";
 
-              try {
-                  for await (const file of globber.globGenerator()) {
+                        const data = fs.readFileSync(file);
 
-                      const name = path.basename(file);
-              
-                      // const file_type = mime.getType(file) || "application/octet-stream";
+                        await github.rest.repos.uploadReleaseAsset({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            release_id: release_id,
+                            name: name,
+                            data: data,
+                            headers: {
+                                "content-type": file_type
+                            }
+                        });
+                    }
 
-                      const file_type = "application/octet-stream";
+                } catch (error) {
 
-                      const data = fs.readFileSync(file);
+                    core.info('There has been an issue uploading the provided glob patterned files');
+                    throw error;
 
-                      console.log(JSON.stringify(release))
-              
-                      await github.rest.repos.uploadReleaseAsset({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          release_id: release.data.id,
-                          name: name,
-                          data: data,
-                          headers: {
-                              "content-type": file_type
-                          }
-                      });
-                  }
-                  
-              } catch (error) {
+                }
+                
+            }
 
-                  core.error('There has been an issue uploading the provided glob patterned files');
-                  throw error;
-                  
-              }
+            try {
 
-              // If its a PR comment that the pre release is trying to be builded, if everything well same comment modify, if bad que fue mal
+                const prerelease_validation = process.env.prerelease.toUpperCase();
 
-          } catch (error) {
-              core.setFailed(error);
-          }
+                // Check supported release types
+                if (prerelease_validation !== 'TRUE' && prerelease_validation !== 'FALSE') {
+                    throw new Error("Invalid prerelease input (valid options: 'true', 'false', 'TRUE', 'FALSE'")
+                } else {
+                    
+                }
+
+                const prerelease = prerelease_validation === 'TRUE';
+                core.info(`This action was set to publish a ${prerelease ? 'prerelease' : 'release'}`)
+
+
+                const tag_name = process.env.tag_name;
+
+                // Calculate pre-release suffix based on retrieved list from API
+                let last_prerelease = 0;
+
+                if (prerelease) {
+                    last_prerelease = await calculateLastPrerelease(tag_name);
+                }
+
+                //Create release and retrying 3 times with higher prerelease suffix if it already exists
+                const release = await createRelease(context.repo.owner, context.repo.repo, tag_name, last_prerelease, process.env.target_commitish, prerelease, 3);
+
+                //Upload release assets
+                await uploadAssets(release.data.id);
+
+            } catch (error) {
+                core.setFailed(error);
+            }
     - name: Only publish
       if: ${{ false }}
       uses: softprops/action-gh-release@v0.1.15
