@@ -108,9 +108,9 @@ module.exports = async ({github, context, core, glob}) => {
         if (prerelease_validation !== 'TRUE' && prerelease_validation !== 'FALSE') {
             throw new Error("Invalid prerelease input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
         } else if (draft_validation !== 'TRUE' && draft_validation !== 'FALSE') {
-            throw new Error("Invalid prerelease input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
+            throw new Error("Invalid draft input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
         } else if (generate_release_notes_validation !== 'TRUE' && generate_release_notes_validation !== 'FALSE') {
-            throw new Error("Invalid prerelease input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
+            throw new Error("Invalid generate_release_notes input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
         }
 
         console.log(process.env.name, process.env.body, process.env.discussion_category_name);
