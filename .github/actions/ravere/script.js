@@ -115,6 +115,10 @@ module.exports = async ({github, context, core, glob}) => {
 
         console.log(process.env.name, process.env.body, process.env.discussion_category_name);
 
+        let algo;
+
+        console.log(algo)
+
         const draft = draft_validation === 'TRUE';
         core.info(`This action was set ${draft ? 'generate a unpublished draft' : 'make a release publication'}`);
     
