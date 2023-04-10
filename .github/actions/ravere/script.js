@@ -46,6 +46,8 @@ module.exports = async ({github, context, core, glob}) => {
                 discussion_category_name: discussion_category_name,
                 generate_release_notes: generate_release_notes
             });
+
+            console.log(JSON.stringify(release));
     
             return release;
     
