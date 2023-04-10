@@ -56,12 +56,15 @@ module.exports = async ({github, context, core, glob}) => {
             return release;
     
         } catch (error) {
+
+
     
-            if (error.status === 422 && error.response.data.errors?.find((error) => error.resource === "Release" && error.code === "already_exists" && error.field === "tag_name")) {
+/*             if (error.status === 422 && error.response.data.errors?.find((error) => error.resource === "Release" && error.code === "already_exists" && error.field === "tag_name")) {
                 core.warning("The generated prerelease suffix already exists, retrying with a higher suffix");
                 return createRelease(owner, repo, tag_name, last_prerelease + 1, target_commitish, prerelease, max_suffix_increase - 1);
-            }
-    
+            } */
+
+            console.log(JSON.stringify(error))
             core.info("There has been an issue tagging and publishing the release");
             throw error;
         }
