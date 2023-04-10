@@ -1,5 +1,11 @@
 name: Demo workflow to
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: "hola"
+        type: boolean
+        default: false
 run-name: Demo workflow
 jobs:
     demo-job:
@@ -10,7 +16,7 @@ jobs:
                 fetch-depth: 0
             - uses: ./.github/actions/ravere
               with:
-                prerelease: 'true'
+                prerelease: ${{ inputs.prerelease }}
                 files: |
                   README.md
                   pr_number.zip
