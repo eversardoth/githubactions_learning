@@ -2,10 +2,10 @@ name: RA Tag and Release
 description: Tags and publishes pre and stable releases
 inputs:
   prerelease:
-    description: Indicator of whether or not it'll publish a prerelease (true or false)
+    description: Indicator of whether or not it'll publish a prerelease (true or false), defaults to false.
     required: false
   files:
-    description: String with glob patterns of files that should be uploaded to the release
+    description: String with glob patterns of files that should be uploaded to the release.
     required: false
   name:
     description: Name of the release, defaults to tag name
@@ -14,13 +14,13 @@ inputs:
     description: Text describing the contents of the tag
     required: false
   draft:
-    description: Indicator of wheter or not a draft unpublished released will be created (true or false)
+    description: Indicator of wheter or not a draft unpublished released will be created (true or false), defaults to false.
     required: false
   discussion_category_name: 
-    description: If specified, a discussion of the specified category is created and linked to the release. The value must be a category that already exists in the repository
+    description: If specified, a discussion of the specified category is created and linked to the release. The value must be a category that already exists in the repository.
     required: false
   generate_release_notes:
-    description: Whether to automatically generate the name and body for this release. If name is specified, the specified name will be used; otherwise, a name will be automatically generated. If body is specified, the body will be pre-pended to the automatically generated notes (true or false).
+    description: Whether to automatically generate the name and body for this release. If name is specified, the specified name will be used; otherwise, a name will be automatically generated. If body is specified, the body will be pre-pended to the automatically generated notes (true or false), defaults to false.
     required: false
   
 
