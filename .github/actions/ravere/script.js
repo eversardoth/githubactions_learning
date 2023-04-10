@@ -117,7 +117,10 @@ module.exports = async ({github, context, core, glob}) => {
 
         let algo;
 
+        let algo2=null;
+
         console.log(algo)
+        console.log(algo2)
 
         const draft = draft_validation === 'TRUE';
         core.info(`This action was set ${draft ? 'generate a unpublished draft' : 'make a release publication'}`);

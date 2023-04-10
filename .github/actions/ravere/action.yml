@@ -42,10 +42,10 @@ runs:
         target_commitish: ${{ github.sha }}
         prerelease: ${{ inputs.prerelease || 'false' }}
         files: ${{ inputs.files }}
-        name: ${{ inputs.name || null }}
-        body: ${{ inputs.body || null }}
+        name: ${{ inputs.name }}
+        body: ${{ inputs.body }}
         draft: ${{ inputs.draft || 'false' }}
-        discussion_category_name: ${{ inputs.discussion_category_name || null }}
+        discussion_category_name: ${{ inputs.discussion_category_name }}
         generate_release_notes: ${{ inputs.generate_release_notes || 'false' }}
       uses: actions/github-script@v6
       with:
