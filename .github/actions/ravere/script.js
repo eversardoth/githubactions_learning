@@ -40,11 +40,6 @@ module.exports = async ({github, context, core, glob}) => {
                 tag_name: prerelease ? `${tag_name}-${last_prerelease + 1}` : tag_name,
                 target_commitish: target_commitish,
                 prerelease: prerelease,
-                name: name,
-                body: body,
-                draft: draft,
-                discussion_category_name: discussion_category_name,
-                generate_release_notes: generate_release_notes
             });
 
 
@@ -64,7 +59,7 @@ module.exports = async ({github, context, core, glob}) => {
                 return createRelease(owner, repo, tag_name, last_prerelease + 1, target_commitish, prerelease, max_suffix_increase - 1);
             } */
 
-            console.log(JSON.stringify(error))
+            console.log(JSON.stringify(error));
             core.info("There has been an issue tagging and publishing the release");
             throw error;
         }
