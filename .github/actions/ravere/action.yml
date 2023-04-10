@@ -2,7 +2,7 @@ name: RA Tag and Release
 description: Tags and publishes pre and stable releases
 inputs:
   prerelease:
-    description: Indicator of whether or not it'll a prerelease publication
+    description: Indicator of whether or not it'll publish a prerelease
     required: false
   files:
     description: String with glob patterns of files that should be uploaded to the release
@@ -36,6 +36,7 @@ runs:
       if: ${{ false }}
       uses: softprops/action-gh-release@v0.1.15
       with:
-        tag_name: ${steps.tag_release.outputs.tag_name}
+        tag_name: ${{ steps.tag_release.outputs.tag_name }}
+        target_commitish: ${{ github.sha }}
         files: ${{ inputs.files }}
         prerelease: ${{inputs.prerelease }}
