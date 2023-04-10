@@ -46,12 +46,6 @@ module.exports = async ({github, context, core, glob}) => {
                 discussion_category_name: discussion_category_name,
                 generate_release_notes: generate_release_notes
             });
-
-
-            console.log(JSON.stringify(release));
-
-            console.log(last_prerelease);
-
     
             return release;
     
@@ -59,12 +53,11 @@ module.exports = async ({github, context, core, glob}) => {
 
 
     
-/*             if (error.status === 422 && error.response.data.errors?.find((error) => error.resource === "Release" && error.code === "already_exists" && error.field === "tag_name")) {
+            if (error.status === 422 && error.response.data.errors?.find((error) => error.resource === "Release" && error.code === "already_exists" && error.field === "tag_name")) {
                 core.warning("The generated prerelease suffix already exists, retrying with a higher suffix");
-                return createRelease(owner, repo, tag_name, last_prerelease + 1, target_commitish, prerelease, max_suffix_increase - 1);
-            } */
+                return createRelease(owner, repo, tag_name, last_prerelease + 1, target_commitish, prerelease, max_suffix_increase - 1, name, body, draft, discussion_category_name, generate_release_notes);
+            }
 
-            console.log(JSON.stringify(error));
             core.info("There has been an issue tagging and publishing the release");
             throw error;
         }
@@ -126,15 +119,6 @@ module.exports = async ({github, context, core, glob}) => {
         } else if (generate_release_notes_validation !== 'TRUE' && generate_release_notes_validation !== 'FALSE') {
             throw new Error("Invalid generate_release_notes input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
         }
-
-        console.log(process.env.name, process.env.body, process.env.discussion_category_name);
-
-        let algo;
-
-        let algo2=null;
-
-        console.log(algo)
-        console.log(algo2)
 
         const draft = draft_validation === 'TRUE';
         core.info(`This action was set ${draft ? 'generate a unpublished draft' : 'make a release publication'}`);
