@@ -47,7 +47,11 @@ module.exports = async ({github, context, core, glob}) => {
                 generate_release_notes: generate_release_notes
             });
 
+
             console.log(JSON.stringify(release));
+
+            console.log(last_prerelease);
+
     
             return release;
     
