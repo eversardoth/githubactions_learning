@@ -101,18 +101,29 @@ module.exports = async ({github, context, core, glob}) => {
     try {
     
         const prerelease_validation = process.env.prerelease.toUpperCase();
+        const draft_validation = process.env.draft.toUpperCase();
+        const generate_release_notes_validation = process.env.draft.toUpperCase();
     
         // Check supported release types
         if (prerelease_validation !== 'TRUE' && prerelease_validation !== 'FALSE') {
-            throw new Error("Invalid prerelease input (valid options: 'true', 'false', 'TRUE', 'FALSE'")
-        } else {
-            
+            throw new Error("Invalid prerelease input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
+        } else if (draft_validation !== 'TRUE' && draft_validation !== 'FALSE') {
+            throw new Error("Invalid prerelease input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
+        } else if (generate_release_notes_validation !== 'TRUE' && generate_release_notes_validation !== 'FALSE') {
+            throw new Error("Invalid prerelease input (valid options: 'true', 'false', 'TRUE', 'FALSE'");
         }
+
+        console.log(process.env.name, process.env.body, process.env.discussion_category_name);
+
+        const draft = draft_validation === 'TRUE';
+        core.info(`This action was set ${draft ? 'generate a unpublished draft' : 'make a release publication'}`);
     
         const prerelease = prerelease_validation === 'TRUE';
-        core.info(`This action was set to publish a ${prerelease ? 'prerelease' : 'release'}`)
-    
-    
+        core.info(`This action was set to publish a ${prerelease ? 'prerelease' : 'release'}`);
+
+        const generate_release_notes = generate_release_notes_validation === 'TRUE';
+        core.info(`This action was set to ${generate_release_notes ? '' : 'not'} automatically genrate release notes`);
+
         const tag_name = process.env.tag_name;
     
         // Calculate pre-release suffix based on retrieved list from API
