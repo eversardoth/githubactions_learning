@@ -40,13 +40,13 @@ runs:
       env:
         tag_name: ${{ steps.tag_generation.outputs.version_tag }}
         target_commitish: ${{ github.sha }}
-        prerelease: ${{ inputs.prerelease }}
+        prerelease: ${{ inputs.prerelease || null }}
         files: ${{ inputs.files }}
         name: ${{ inputs.name || null }}
         body: ${{ inputs.body || null }}
-        draft: ${{ inputs.draft }}
+        draft: ${{ inputs.draft || null }}
         discussion_category_name: ${{ inputs.discussion_category_name || null }}
-        generate_release_notes: ${{ inputs.generate_release_notes }}
+        generate_release_notes: ${{ inputs.generate_release_notes || null }}
       uses: actions/github-script@v6
       with:
         retries: 3
