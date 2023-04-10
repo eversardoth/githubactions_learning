@@ -40,6 +40,11 @@ module.exports = async ({github, context, core, glob}) => {
                 tag_name: prerelease ? `${tag_name}-${last_prerelease + 1}` : tag_name,
                 target_commitish: target_commitish,
                 prerelease: prerelease,
+                name: name,
+                body: body,
+                draft: draft,
+                discussion_category_name: discussion_category_name,
+                generate_release_notes: generate_release_notes
             });
 
 
@@ -150,7 +155,7 @@ module.exports = async ({github, context, core, glob}) => {
         }
     
         //Create release and retrying 3 times with higher prerelease suffix if it already exists
-        const release = await createRelease(context.repo.owner, context.repo.repo, tag_name, last_prerelease, process.env.target_commitish, prerelease, Number(core.getInput("retries")), process.env.name, process.env.body, draft, process.env.discussion_category_name, generate_release_notes);
+        const release = await createRelease(context.repo.owner, context.repo.repo, tag_name, last_prerelease, process.env.target_commitish, prerelease, Number(core.getInput("retries")), process.env.name || undefined , process.env.body || undefined, draft, process.env.discussion_category_name || undefined, generate_release_notes);
     
         //Upload release assets
         await uploadAssets(release.data.id);
