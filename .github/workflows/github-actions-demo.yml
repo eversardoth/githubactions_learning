@@ -1,7 +1,7 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
-  workflow_dispatch:
+  pull_request:
 env:
   config-path: holaaaaaaa
   config-patht: hola2
@@ -16,24 +16,7 @@ jobs:
         with:
           fetch-depth: '0'
       - run: |
-          git fetch origin 7f77ca7a59ce6e0b27126f1127285d2267c7f2c1
-          git show 7f77ca7a59ce6e0b27126f1127285d2267c7f2c1 --format=fuller
-      - uses: paulhatch/semantic-version@master
-        id: semantic
-        with:
-          version_format: ${major}.${minor}.${patch}-eversardoth
-      - run: |
-          echo "${{ steps.semantic.outputs.major }}"
-          echo "${{ steps.semantic.outputs.minor }}"
-          echo "${{ steps.semantic.outputs.patch }}"
-          echo "${{ steps.semantic.outputs.increment }}"
-          echo "${{ steps.semantic.outputs.version }}"
-          echo "${{ steps.semantic.outputs.version_tag }}"
-          echo "${{ steps.semantic.outputs.authors }}"
-          echo "${{ steps.semantic.outputs.current_commit }}"
-          echo "${{ steps.semantic.outputs.previous_commit }}"
-          echo "${{ steps.semantic.outputs.previous_version}}"
-
+          git branch
 
           
    
